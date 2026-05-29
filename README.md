@@ -1,7 +1,8 @@
 ## PROJECT
-
-## INSTALL JSON SERVER
-npm install json-server --save-dev
+This is an SPA (single page application) about rick and morty serie.
+We have different views , including characters, locations, 
+## INSTALL npm
+npm i in the terminal
 
 ## HOW TO RUN
 `npm run dev`
