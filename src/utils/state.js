@@ -1,4 +1,4 @@
-import { getCharacters, getEpisodes, getLocations } from "../services/api.js";
+import { getCharacters } from "../services/api.js";
 import {saveLocalCharacters, saveDeletedCharacters, saveEditedCharacters , loadLocalCharacters,
      loadDeletedCharacters, loadEditedCharacters} from "../services/storage.js";
 
