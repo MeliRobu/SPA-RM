@@ -7,9 +7,9 @@ export const charactersPage = async (app) => {
     <header>
         <h1>Characters</h1>
         <nav>
-            <a href="/" onclick="event.preventDefault(); navigateTo('/')">Inicio</a>
-            <a href="/episodes" onclick="event.preventDefault(); navigateTo('/episodes')">Episodes</a>
-            <a href="/locations" onclick="event.preventDefault(); navigateTo('/locations')">Locations</a>
+            <a href="/" onclick="event.preventDefault(); navigateTo('/')">Home</a>
+            <a href="/episodes.js" onclick="event.preventDefault(); navigateTo('/episodes')">Episodes</a>
+            <a href="/locations.js" onclick="event.preventDefault(); navigateTo('/locations')">Locations</a>
         </nav>
     </header>
     <p id="loading-msg">Cargando personajes...</p>
@@ -17,7 +17,7 @@ export const charactersPage = async (app) => {
 `;
 
     await loadInicialData();
-    
+
     const allCharacters    = getCharactersCopy();
     const deletedIds       = getDeletedCharactersCopy();
     const editedCharacters = getEditedCharactersCopy();

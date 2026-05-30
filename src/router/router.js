@@ -18,6 +18,9 @@ export const navigateTo = (path) => {
     router();
 }
 
+window.navigateTo = navigateTo; // Expose navigateTo to the global scope so it can be called from inline HTML onclick handlers
+
+
 export const router = async() => {
     const app = document.querySelector("#app"); // Get the main app container
     
