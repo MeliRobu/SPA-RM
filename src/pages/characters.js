@@ -1,5 +1,5 @@
 import { navigateTo } from '../router/router.js';
-import { initState, getCharactersCopy, getDeletedCharactersCopy, getEditedCharactersCopy } from '../utils/state.js';
+import { loadInicialData, getCharactersCopy, getDeletedCharactersCopy, getEditedCharactersCopy } from '../utils/state.js';
 
 export const charactersPage = async (app) => {
 
@@ -16,8 +16,8 @@ export const charactersPage = async (app) => {
     <div id="characters-container"></div>
 `;
 
-    await initState();
-
+    await loadInicialData();
+    
     const allCharacters    = getCharactersCopy();
     const deletedIds       = getDeletedCharactersCopy();
     const editedCharacters = getEditedCharactersCopy();
