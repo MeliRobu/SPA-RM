@@ -1,15 +1,18 @@
+/* ── Reset general ────────────────────────────────────────────────────────────── */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* ── Base ─────────────────────────────────────────────────────────────────────── */
 body {
     background-color: #0a0e0a;
     color: #c8f0c8;
     font-family: sans-serif;
 }
 
+/* ── Header y navegación ──────────────────────────────────────────────────────── */
 header {
     background: #0a0e0a;
     border-bottom: 1px solid #1a3a1a;
@@ -21,18 +24,19 @@ header {
     align-items: center;
     justify-content: space-between;
 }
-header {
-    background: #0a0e0a;
-    border-bottom: 1px solid #1a3a1a;
-    padding: 1rem 1.5rem;
-    position: sticky;
-    top: 0;
-    z-index: 100;
+
+h1 {
+    color: #39ff14;
+    font-size: 1.2rem;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
 }
 
 nav {
     display: flex;
     gap: 2rem;
+    align-items: center;
 }
 
 nav a {
@@ -48,30 +52,34 @@ nav a:hover {
     color: #39ff14;
 }
 
-h1 {
+/* ── Botón de crear personaje en el header ────────────────────────────────────── */
+nav button {
+    background: transparent;
+    border: 1px solid #39ff14;
     color: #39ff14;
-    font-size: 1.2rem;
-    font-weight: 500;
-    letter-spacing: 3px;
+    padding: 0.4rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
     text-transform: uppercase;
+    transition: background 0.2s, color 0.2s;
 }
 
-h1 {
-    color: #39ff14;
-    font-size: 1.5rem;
-    font-weight: 500;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    padding: 1.5rem;
+nav button:hover {
+    background: #39ff14;
+    color: #0a0e0a;
 }
 
+/* ── Grid de tarjetas ─────────────────────────────────────────────────────────── */
 #characters-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 1rem;
-    padding: 0 1.5rem 1.5rem;
+    padding: 1.5rem;
 }
 
+/* ── Tarjeta de personaje ─────────────────────────────────────────────────────── */
 .character-card {
     background: #0f1a0f;
     border: 1px solid #1a3a1a;
@@ -130,25 +138,50 @@ h1 {
     font-weight: 500;
 }
 
-nav button {
+/* ── Botones de acción en cada tarjeta ────────────────────────────────────────── */
+.card-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.card-buttons button {
+    flex: 1;
     background: transparent;
-    border: 1px solid #39ff14;
-    color: #39ff14;
-    padding: 0.4rem 1rem;
+    padding: 0.35rem 0;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     letter-spacing: 1px;
     text-transform: uppercase;
     transition: background 0.2s, color 0.2s;
 }
 
-nav button:hover {
+/* Botón editar */
+.card-buttons button:first-child {
+    border: 1px solid #39ff14;
+    color: #39ff14;
+}
+
+.card-buttons button:first-child:hover {
     background: #39ff14;
     color: #0a0e0a;
 }
 
-#create-modal {
+/* Botón eliminar */
+.card-buttons button:last-child {
+    border: 1px solid #d63d2e;
+    color: #d63d2e;
+}
+
+.card-buttons button:last-child:hover {
+    background: #d63d2e;
+    color: #0a0e0a;
+}
+
+/* ── Modales (crear y editar) ─────────────────────────────────────────────────── */
+#create-modal,
+#edit-modal {
     position: fixed;
     inset: 0;
     z-index: 200;
@@ -183,6 +216,7 @@ nav button:hover {
     font-size: 1rem;
 }
 
+/* Inputs y selects del modal */
 .modal-content input,
 .modal-content select {
     background: #0a0e0a;
@@ -204,12 +238,14 @@ nav button:hover {
     background: #0a0e0a;
 }
 
+/* Botones del modal */
 .modal-buttons {
     display: flex;
     gap: 1rem;
     justify-content: flex-end;
 }
 
+/* Botón cancelar */
 .modal-buttons button:first-child {
     background: transparent;
     border: 1px solid #4a7a4a;
@@ -228,6 +264,7 @@ nav button:hover {
     color: #0a0e0a;
 }
 
+/* Botón guardar */
 .modal-buttons button:last-child {
     background: transparent;
     border: 1px solid #39ff14;

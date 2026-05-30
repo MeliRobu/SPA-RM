@@ -1,28 +1,44 @@
 import { navigateTo } from '../router/router.js';
-import { loadInicialData, getCharactersCopy, getDeletedCharactersCopy, getEditedCharactersCopy, addCharacter } from '../utils/state.js';
+import { loadInicialData, getCharactersCopy, getDeletedCharactersCopy, getEditedCharactersCopy } from '../utils/state.js';
+import { openCreateModal } from './createCharacter.js';
+import { deleteCharacter } from './delete.js';
+import { editCharacterModal } from './editCharacter.js';
 
+// ── Exponer funciones al scope global para los onclick del HTML ────────────────
+window.openCreateModal   = openCreateModal;
+window.deleteCharacter   = deleteCharacter;
+window.editCharacterModal = editCharacterModal;
+
+// ── Página principal de personajes ────────────────────────────────────────────
 export const charactersPage = async (app) => {
 
     app.innerHTML = `
-    <header>
-        <h1>Characters</h1>
-        <nav>
-            <a href="/" onclick="event.preventDefault(); navigateTo('/')">Home</a>
-            <a href="/episodes.js" onclick="event.preventDefault(); navigateTo('/episodes')">Episodes</a>
-            <a href="/locations.js" onclick="event.preventDefault(); navigateTo('/locations')">Locations</a>
-            <button onclick="openCreateModal()">+ Crear personaje</button>
-        </nav>
-    </header>
-    <p id="loading-msg">Cargando personajes...</p>
-    <div id="characters-container"></div>
-`;
+        <header>
+            <h1>Characters</h1>
+            <nav>
+                <a href="/" onclick="event.preventDefault(); navigateTo('/')">Home</a>
+                <a href="/episodes" onclick="event.preventDefault(); navigateTo('/episodes')">Episodes</a>
+                <a href="/locations" onclick="event.preventDefault(); navigateTo('/locations')">Locations</a>
+                <button onclick="openCreateModal()">+ Crear personaje</button>
+            </nav>
+        </header>
+        <p id="loading-msg">Cargando personajes...</p>
+        <div id="characters-container"></div>
+    `;
 
     await loadInicialData();
 
+    renderCharacters();
+};
+
+// ── Renderiza todas las tarjetas visibles ─────────────────────────────────────
+// Se exporta para que createCharacter.js y editCharacter.js puedan re-renderizar
+export const renderCharacters = () => {
     const allCharacters    = getCharactersCopy();
     const deletedIds       = getDeletedCharactersCopy();
     const editedCharacters = getEditedCharactersCopy();
 
+    // Filtrar eliminados y aplicar ediciones locales encima de los datos de la API
     const visibleCharacters = allCharacters
         .filter(character => !deletedIds.includes(character.id))
         .map(character => {
@@ -30,13 +46,17 @@ export const charactersPage = async (app) => {
             return localEdits ? { ...character, ...localEdits } : character;
         });
 
-    document.getElementById("loading-msg").remove();
+    // Quitar mensaje de carga si aún existe
+    const loadingMsg = document.getElementById("loading-msg");
+    if (loadingMsg) loadingMsg.remove();
 
     const container = document.getElementById("characters-container");
     container.innerHTML = visibleCharacters.map(character => createCharacterCard(character)).join('');
 };
 
-const createCharacterCard = (character) => {
+// ── Genera el HTML de una tarjeta ─────────────────────────────────────────────
+// Se exporta para que editCharacter.js pueda reutilizarla al re-renderizar
+export const createCharacterCard = (character) => {
     const statusColor = getStatusColor(character.status);
     return `
         <div class="character-card" data-id="${character.id}">
@@ -54,11 +74,16 @@ const createCharacterCard = (character) => {
                 <p class="character-detail"><span class="label">Género:</span> ${character.gender}</p>
                 <p class="character-detail"><span class="label">Origen:</span> ${character.origin.name}</p>
                 <p class="character-detail"><span class="label">Última ubicación:</span> ${character.location.name}</p>
+                <div class="card-buttons">
+                    <button onclick="editCharacterModal('${character.id}')">Editar</button>
+                    <button onclick="deleteCharacter('${character.id}')">Eliminar</button>
+                </div>
             </div>
         </div>
     `;
 };
 
+// ── Color del indicador según estado del personaje ────────────────────────────
 const getStatusColor = (status) => {
     const colors = {
         "Alive":   "#55cc44",
@@ -67,76 +92,3 @@ const getStatusColor = (status) => {
     };
     return colors[status] ?? "#9e9e9e";
 };
-
-export const openCreateModal = () => {
-    const modal = document.createElement('div');
-    modal.id = 'create-modal';
-    modal.innerHTML = `
-        <div class="modal-overlay" onclick="closeCreateModal()"></div>
-        <div class="modal-content">
-            <h2>Crear personaje</h2>
-            <input type="text" id="input-name" placeholder="Nombre" />
-            <input type="text" id="input-species" placeholder="Especie" />
-            <select id="input-gender">
-                <option value="">Género</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="unknown">Unknown</option>
-            </select>
-            <select id="input-status">
-                <option value="">Estado</option>
-                <option value="Alive">Alive</option>
-                <option value="Dead">Dead</option>
-                <option value="unknown">Unknown</option>
-            </select>
-            <input type="text" id="input-image" placeholder="URL de imagen" />
-            <div class="modal-buttons">
-                <button onclick="closeCreateModal()">Cancelar</button>
-                <button onclick="submitCreateCharacter()">Guardar</button>
-            </div>
-        </div>
-    `;
-    document.body.appendChild(modal);
-};
-
-window.openCreateModal = openCreateModal;
-
-export const closeCreateModal = () => {
-    const modal = document.getElementById('create-modal');
-    if (modal) modal.remove();
-};
-
-window.closeCreateModal = closeCreateModal;
-
-export const submitCreateCharacter = () => {
-    const name    = document.getElementById('input-name').value.trim();
-    const species = document.getElementById('input-species').value.trim();
-    const gender  = document.getElementById('input-gender').value;
-    const status  = document.getElementById('input-status').value;
-    const image   = document.getElementById('input-image').value.trim();
-
-    if (!name || !species || !gender || !status) {
-        alert('Por favor completa todos los campos obligatorios.');
-        return;
-    }
-
-    addCharacter({ name, species, gender, status, image });
-    closeCreateModal();
-
-    // Re-renderizar las tarjetas
-    const allCharacters    = getCharactersCopy();
-    const deletedIds       = getDeletedCharactersCopy();
-    const editedCharacters = getEditedCharactersCopy();
-
-    const visibleCharacters = allCharacters
-        .filter(c => !deletedIds.includes(c.id))
-        .map(c => {
-            const localEdits = editedCharacters[c.id];
-            return localEdits ? { ...c, ...localEdits } : c;
-        });
-
-    document.getElementById('characters-container').innerHTML =
-        visibleCharacters.map(c => createCharacterCard(c)).join('');
-};
-
-window.submitCreateCharacter = submitCreateCharacter;
