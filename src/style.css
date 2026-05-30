@@ -3,6 +3,147 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+/* Episodes View */
+body {
+    background-color: #0a0e0a;
+}
+
+/* Episodes View */
+.episodes-view {
+    padding: 0;
+}
+
+.episodes-view h1 {
+    color: #39ff14;
+    font-size: 2.5rem;
+    margin: 1.5rem 0;
+}
+
+.episodes-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1.5rem;
+    border-bottom: 1px solid #1f4a1f;
+}
+
+.episodes-view nav {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    padding: 1.5rem 0;
+}
+
+.episodes-view nav a {
+    color: #8aff70;
+    text-decoration: none;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+}
+
+.episodes-view nav a:hover {
+    color: #39ff14;
+}
+
+.episodes-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+    padding: 1.5rem;
+}
+
+.episode-card {
+    background: #0f1a0f;
+    border: 1px solid #1f4a1f;
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: center;
+    transition: border-color 0.2s, transform 0.2s;
+}
+
+.episode-card:hover {
+    border-color: #39ff14;
+    transform: translateY(-4px);
+}
+
+.episode-name {
+    color: #39ff14;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.episode-code,
+.episode-detail,
+.episode-characters {
+    font-size: 0.78rem;
+    color: #6a9a6a;
+    margin: 3px 0;
+}
+
+.episode-code strong,
+.episode-detail strong,
+.episode-characters strong {
+    color: #4a9a4a;
+}
+
+details {
+    margin-top: 0.75rem;
+    border-top: 1px solid #1f4a1f;
+    padding-top: 0.5rem;
+}
+
+summary {
+    font-size: 0.78rem;
+    color: #6a9a6a;
+    cursor: pointer;
+    list-style: none;
+    transition: color 0.2s;
+}
+
+summary:hover {
+    color: #39ff14;
+}
+
+details ul {
+    margin-top: 0.5rem;
+    padding-left: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-align: left;
+}
+
+details li {
+    font-size: 0.75rem;
+    color: #6a9a6a;
+    word-break: break-all;
+}
+
+details li strong {
+    color: #4a9a4a;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #9ca3af;
+    --text-h: #f3f4f6;
+    --bg: #16171d;
+    --border: #2e303a;
+    --code-bg: #1f2028;
+    --accent: #c084fc;
+    --accent-bg: rgba(192, 132, 252, 0.15);
+    --accent-border: rgba(192, 132, 252, 0.5);
+    --social-bg: rgba(47, 48, 58, 0.5);
+    --shadow:
+      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+  }
+
+  #social .button-icon {
+    filter: invert(1) brightness(2);
+  }
 }
 
 /* ── Base ─────────────────────────────────────────────────────────────────────── */

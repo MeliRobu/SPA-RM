@@ -34,4 +34,3 @@ export const getLocations = async ()=> {
   const locations = await apiFetch("/location"); // Fetch locations from API
   return locations.results; // Return only the results array from the API response
 }
-
