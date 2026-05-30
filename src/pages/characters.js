@@ -23,7 +23,7 @@ export const charactersPage = async (app) => {
                 <a href="/" onclick="event.preventDefault(); navigateTo('/')">Home</a>
                 <a href="/episodes" onclick="event.preventDefault(); navigateTo('/episodes')">Episodes</a>
                 <a href="/locations" onclick="event.preventDefault(); navigateTo('/locations')">Locations</a>
-                <button onclick="openCreateModal()">+ Crear personaje</button>
+                <button onclick="openCreateModal()">Create character</button>
             </nav>
         </header>
         <p id="loading-msg">Cargando personajes...</p>

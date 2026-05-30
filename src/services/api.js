@@ -19,6 +19,12 @@ export const getCharacters = async ()=> {
   return characters.results;// Return only the results array from the API response
 }
 
+/*export const getCharacters = async () => {
+    const page1 = await apiFetch("/character?page=1");
+    const page2 = await apiFetch("/character?page=2");
+    return [...page1.results, ...page2.results];
+}*/
+
 export const getEpisodes = async ()=> {
   const episodes = await apiFetch("/episode"); // Fetch episodes from API
   return episodes.results; // Return only the results array from the API response

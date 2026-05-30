@@ -1,80 +1,93 @@
-import { getCharacters, getEpisodes, getLocations } from "../services/api.js";
-import {saveLocalCharacters, saveDeletedCharacters, saveEditedCharacters , loadLocalCharacters,
-     loadDeletedCharacters, loadEditedCharacters} from "../services/storage.js";
+import { getCharacters } from "../services/api.js";
+import {
+    saveLocalCharacters,
+    saveDeletedCharacters,
+    saveEditedCharacters,
+    loadLocalCharacters,
+    loadDeletedCharacters,
+    loadEditedCharacters
+} from "../services/storage.js";
 
-let characters = [];
-let deletedCharacters = [];
-let editedCharacters = {};
+// ── Variables de estado en memoria ────────────────────────────────────────────
+let characters        = []; // Personajes de la API + personajes locales creados por el usuario
+let deletedCharacters = []; // IDs de personajes eliminados por el usuario
+let editedCharacters  = {}; // Ediciones del usuario { [id]: { name, species, status } }
 
+// ── Getters — devuelven copias para no mutar el estado directamente ────────────
 export const getCharactersCopy = () => {
     return [...characters];
-}
+};
 
 export const getDeletedCharactersCopy = () => {
     return [...deletedCharacters];
-}
+};
 
 export const getEditedCharactersCopy = () => {
-    return {...editedCharacters};
-}
+    return { ...editedCharacters };
+};
 
 export const getCharacterById = (id) => {
-    const character = characters.find(character => character.id === id);
-    if (character === undefined) {
-        return null;
-    }
-    return character;
-}
-//Setters
-//Recives a n array of characters and keeps it in memorie (inicial load)
+    const character = characters.find(c => String(c.id) === String(id));
+    return character ?? null;
+};
+
+// ── Setters ───────────────────────────────────────────────────────────────────
+
+// Recibe un array de personajes y lo guarda en memoria (carga inicial)
 export const setCharacters = (data) => {
     characters = data;
     saveLocalCharacters(characters);
-}
-// Appends a new id to the array of deleted characters (new array with the new id)
+};
+
+// Agrega un id al array de personajes eliminados
 export const setDeletedCharacters = (id) => {
     deletedCharacters = [...deletedCharacters, id];
     saveDeletedCharacters(deletedCharacters);
-}
-// Adds a new character with the id and isLocal. 
+};
+
+// Agrega un nuevo personaje local con id único y campos requeridos
 export const addCharacter = (newCharacter) => {
     const character = {
         ...newCharacter,
-        id: "local-" + Date.now(), // Generate a unique id for the local character
+        id: "local-" + Date.now(), // ID único para personajes locales
         isLocal: true,
+        // Campos requeridos por createCharacterCard que la API siempre trae
+        image:    newCharacter.image || "https://rickandmortyapi.com/api/character/avatar/19.jpeg",
+        origin:   { name: "Local" },
+        location: { name: "Local" },
     };
-    characters = [...characters, character];
-    saveLocalCharacters(characters);
 
-}
-// modifies a character with the id and the new data. If the character is local, it modifies the character in the array of characters. 
-// If the character is not local, it adds the character to the array of edited characters with the id as key and the new data as value.
+    characters = [...characters, character];
+
+    // Guardar solo los personajes locales en localStorage (no mezclar con los de la API)
+    const localOnly = characters.filter(c => c.isLocal);
+    saveLocalCharacters(localOnly);
+};
+
+// Modifica un personaje existente sin tocar los datos originales de la API
 export const editCharacter = (id, changes) => {
     characters = characters.map((currentCharacter) => {
-        if (currentCharacter.id === id) {
-            const editedCharacter = {
+        if (String(currentCharacter.id) === String(id)) {
+            return {
                 ...currentCharacter,
                 ...changes,
                 isEdited: true
             };
-            return editedCharacter;
-        } else {
-            return currentCharacter; // if the character is not the one we want to edit, 
-            // we return it without changes
         }
-})
-    saveEditedCharacters(Characters);
-}
+        return currentCharacter; // Sin cambios si no es el personaje buscado
+    });
+    saveEditedCharacters(characters); // Persistir cambios en localStorage
+};
 
+// ── Carga inicial — trae personajes de la API y restaura estado local ──────────
 export const loadInicialData = async () => {
-    //We ask the API for the characters, episodes and locations and we save them in memory. We also save them in local storage to persist the data.
-    const apiCharacters = await getCharacters();
-    const localCharacters = loadLocalCharacters();
-    const deletedC = loadDeletedCharacters();
-    const editedC = loadEditedCharacters();
-    characters = [...apiCharacters, ...localCharacters];
+    const apiCharacters   = await getCharacters();   // Personajes frescos de la API
+    const localCharacters = loadLocalCharacters();   // Solo personajes creados por el usuario
+    const deletedC        = loadDeletedCharacters(); // IDs eliminados por el usuario
+    const editedC         = loadEditedCharacters();  // Ediciones del usuario
 
-    editedCharacters = editedC ;
+    // Combinar API + locales sin duplicar
+    characters        = [...apiCharacters, ...localCharacters];
+    editedCharacters  = editedC;
     deletedCharacters = deletedC;
-
-}
+};
