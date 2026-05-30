@@ -1,7 +1,7 @@
 // Router function
-import {charactersPage} from "../pages/characters";// Import the characters page rendering function
-import {episodesPage} from "../pages/episodes";// Import the episodes page rendering function
-import {locationsPage} from "../pages/locations";// Import the locations page rendering function
+import {charactersPage} from "../pages/characters.js";// Import the characters page rendering function
+import {episodesPage} from "../pages/episodes.js";// Import the episodes page rendering function
+import {locationsPage} from "../pages/locations.js";// Import the locations page rendering function
 //import {} from "../pages/createCharacter";// Import the character detail page rendering function
 //import {} from "../pages/episodeDetail";// Import the episode detail page rendering function
 //import {} from "../pages/locationDetail";// Import the location detail page rendering function
