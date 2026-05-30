@@ -2,9 +2,6 @@
 import {charactersPage} from "../pages/characters.js";// Import the characters page rendering function
 import {episodesPage} from "../pages/episodes.js";// Import the episodes page rendering function
 import {locationsPage} from "../pages/locations.js";// Import the locations page rendering function
-//import {} from "../pages/createCharacter";// Import the character detail page rendering function
-//import {} from "../pages/episodeDetail";// Import the episode detail page rendering function
-//import {} from "../pages/locationDetail";// Import the location detail page rendering function
 
 const routes = {
     "/": charactersPage, // Define the route for the home page (characters)
@@ -12,6 +9,9 @@ const routes = {
     "/locations": locationsPage, // Define the route for the locations page    
     "/characters" : charactersPage, // Define the route for the character detail page"
 }
+
+
+window.navigateTo = navigateTo; // Expose navigateTo to the global scope so it can be called from inline HTML onclick handlers
 
 
 export const router = async() => {

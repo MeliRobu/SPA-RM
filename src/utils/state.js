@@ -2,21 +2,23 @@ import { getCharacters } from "../services/api.js";
 import {saveLocalCharacters, saveDeletedCharacters, saveEditedCharacters , loadLocalCharacters,
      loadDeletedCharacters, loadEditedCharacters} from "../services/storage.js";
 
-let characters = [];
-let deletedCharacters = [];
-let editedCharacters = {};
+// ── Variables de estado en memoria ────────────────────────────────────────────
+let characters        = []; // Personajes de la API + personajes locales creados por el usuario
+let deletedCharacters = []; // IDs de personajes eliminados por el usuario
+let editedCharacters  = {}; // Ediciones del usuario { [id]: { name, species, status } }
 
+// ── Getters — devuelven copias para no mutar el estado directamente ────────────
 export const getCharactersCopy = () => {
     return [...characters];
-}
+};
 
 export const getDeletedCharactersCopy = () => {
     return [...deletedCharacters];
-}
+};
 
 export const getEditedCharactersCopy = () => {
-    return {...editedCharacters};
-}
+    return { ...editedCharacters };
+};
 
 export const getCharacterById = (id) => {
     const character = characters.find(character => character.id === id);
