@@ -63,7 +63,7 @@ export const editCharacter = (id, changes) => {
             // we return it without changes
         }
 })
-    saveEditedCharacters(editedCharacters);
+    saveEditedCharacters(characters);
 }
 
 export const loadInicialData = async () => {
